@@ -67,3 +67,34 @@ reviews['critic']
 #Assigning itterable values
 reviews['index_backwards'] = range(len(reviews), 0, -1)
 reviews['index_backwards']
+
+#median of the pont column in reviews
+median_points =reviews.points.median()
+#countries represented
+countries = reviews.country.unique()
+#count of reviews of each country
+reviews_per_country = reviews.country.value_counts()
+#removing the mean from price
+centered_price = reviews.price - reviews.price.mean()
+#best price to points ratio
+bargain_idx = (reviews.points / reviews.price).idxmax()
+bargain_wine = reviews.loc[bargain_idx, 'title']
+#counting tropical and fruity
+n_trop = reviews.description.map(lambda desc: 'tropical' in desc).sum()
+n_fruity = reviews.description.map(lambda desc: 'fruity' in desc).sum()
+descriptor_counts = pd.Series([n_trop, n_fruity], index=['tropical', 'fruity']) 
+
+#a Series whose index is the taster_twitter_handle category from the dataset, and whose values count how many reviews each person wrote.
+reviews_written = reviews.groupby('taster_twitter_handle').size()
+#a Series whose index is wine prices and whose values is the maximum number of points a wine costing that much was given in a review. 
+# Sort the values by price, ascending (so that 4.0 dollars is at the top and 3300.0 dollars is at the bottom).
+best_rating_per_price = reviews.groupby('price')['points'].max().sort_index()
+#Create a DataFrame whose index is the variety category from the dataset and whose values are the min and max values thereof.
+price_extremes = reviews.groupby('variety').price.agg([min, max])
+#Create a variable sorted_varieties containing a copy of the dataframe 
+#from the previous question where varieties are sorted in descending order based on minimum price, then on maximum price (to break ties).
+sorted_varieties = price_extremes.sort_values(by=['min', 'max'], ascending=False)
+#Create a Series whose index is reviewers and whose values is the average review score given out by that reviewer. Hint: you will need the taster_name and points columns.
+reviewer_mean_ratings = reviews.groupby('taster_name').points.mean()
+#Create a Series whose index is a MultiIndexof {country, variety} pairs. 
+country_variety_counts = reviews.groupby(['country', 'variety']).size().sort_values(ascending=False)
