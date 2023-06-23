@@ -98,3 +98,25 @@ sorted_varieties = price_extremes.sort_values(by=['min', 'max'], ascending=False
 reviewer_mean_ratings = reviews.groupby('taster_name').points.mean()
 #Create a Series whose index is a MultiIndexof {country, variety} pairs. 
 country_variety_counts = reviews.groupby(['country', 'variety']).size().sort_values(ascending=False)
+
+#data type of the points column in the datase
+dtype = reviews.points.dtype
+#Create a Series from entries in the points column, but convert the entries to strings. Hint: strings are str in native Python.
+point_strings = reviews.points.astype(str)
+#Sometimes the price column is null. How many reviews in the dataset are missing a price?
+n_missing_prices = reviews.price.isnull().sum()
+#Create a Series counting the number of times each value occurs in the region_1 field. This field is often missing data, so replace missing values with Unknown.
+reviews_per_region = reviews.region_1.fillna('Unknown').value_counts().sort_values(ascending=False) 
+
+#region_1 and region_2 are pretty uninformative names for locale columns in the dataset. Create a copy of reviews with these columns renamed to region and locale, respectively.
+renamed = reviews.rename(columns={'region_1': 'region', 'region_2': 'locale'})
+#Set the index name in the dataset to wines.
+gaming_products = pd.read_csv("../input/things-on-reddit/top-things/top-things/reddits/g/gaming.csv")
+gaming_products['subreddit'] = "r/gaming"
+movie_products = pd.read_csv("../input/things-on-reddit/top-things/top-things/reddits/m/movies.csv")
+movie_products['subreddit'] = "r/movies"
+#Create a DataFrame of products mentioned on either subreddit
+combined_products = pd.concat([gaming_products, movie_products])
+powerlifting_meets = pd.read_csv("../input/powerlifting-database/meets.csv")
+powerlifting_competitors = pd.read_csv("../input/powerlifting-database/openpowerlifting.csv")
+#Both tables include references to a MeetID, a unique key for each meet (competition) included in the database. Using this, generate a dataset combining the two tables into one
