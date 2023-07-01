@@ -264,3 +264,24 @@ preds = my_pipeline.predict(X_valid)
 score = mean_absolute_error(y_valid, preds)
 print('MAE:', score)
 
+
+#my code
+
+# Preprocessing for numerical data
+numerical_transformer = SimpleImputer(strategy='median') # Your code here
+
+# Preprocessing for categorical data
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))
+]) # Your code here
+
+# Bundle preprocessing for numerical and categorical data
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numerical_transformer, numerical_cols),
+        ('cat', categorical_transformer, categorical_cols)
+    ])
+
+# Define model
+model = RandomForestRegressor(n_estimators=120, criterion='absolute_error', random_state=0,min_samples_split = 2, max_features=350, max_leaf_nodes= 130)
