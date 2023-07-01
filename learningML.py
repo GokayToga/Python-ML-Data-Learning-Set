@@ -285,3 +285,42 @@ preprocessor = ColumnTransformer(
 
 # Define model
 model = RandomForestRegressor(n_estimators=120, criterion='absolute_error', random_state=0,min_samples_split = 2, max_features=350, max_leaf_nodes= 130)
+
+#cross validation
+# dividing a data set to folds and use each fold as a validation set and the rest as a training set for each fold
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+
+my_pipeline = Pipeline(steps=[('preprocessor', SimpleImputer()),
+                              ('model', RandomForestRegressor(n_estimators=50,
+                                                              random_state=0))
+                             ])
+
+from sklearn.model_selection import cross_val_score
+
+# Multiply by -1 since sklearn calculates *negative* MAE
+scores = -1 * cross_val_score(my_pipeline, X, y,
+                              cv=5,
+                              scoring='neg_mean_absolute_error')
+
+print("MAE scores:\n", scores)
+
+#my code
+
+def get_score(n_estimators):
+    """Return the average MAE over 3 CV folds of random forest model.
+    
+    Keyword argument:
+    n_estimators -- the number of trees in the forest
+    """
+    my_pipeline = Pipeline(steps=[
+            ('preprocessor', SimpleImputer()),
+            ('model', RandomForestRegressor(n_estimators, random_state=0))
+        ])
+    scores = -1 * cross_val_score(my_pipeline, X, y,
+                                      cv=3,
+                                      scoring='neg_mean_absolute_error')
+    return scores.mean()
+
