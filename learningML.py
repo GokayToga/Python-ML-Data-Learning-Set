@@ -324,3 +324,82 @@ def get_score(n_estimators):
                                       scoring='neg_mean_absolute_error')
     return scores.mean()
 
+
+
+#Gradiant Boosting
+#ensemble methods combine the predictions of several models, and another ensembke methid is gradiant boosting
+#gradiant boosting uses the predictions of many decision trees
+#Gradient boosting is a method that goes through cycles to iteratively add models into an ensemble.
+
+from xgboost import XGBRegressor
+
+
+my_model = XGBRegressor()
+my_model.fit(X_train, y_train)
+
+from sklearn.metrics import mean_absolute_error
+
+predictions = my_model.predict(X_valid)
+print("Mean Absolute Error: " + str(mean_absolute_error(predictions, y_valid)))
+
+my_model = XGBRegressor(n_estimators=500)
+my_model.fit(X_train, y_train)
+
+#We can modify the example above to include early stopping:
+my_model = XGBRegressor(n_estimators=500)
+my_model.fit(X_train, y_train, 
+             early_stopping_rounds=5, 
+             eval_set=[(X_valid, y_valid)],
+             verbose=False)
+
+#Modifying the example above to change the learning rate yields the following code:
+my_model = XGBRegressor(n_estimators=1000, learning_rate=0.05)
+my_model.fit(X_train, y_train, 
+             early_stopping_rounds=5, 
+             eval_set=[(X_valid, y_valid)], 
+             verbose=False)
+
+#modified example of parallelism
+my_model = XGBRegressor(n_estimators=1000, learning_rate=0.05, n_jobs=4)
+my_model.fit(X_train, y_train, 
+             early_stopping_rounds=5, 
+             eval_set=[(X_valid, y_valid)], 
+             verbose=False)
+
+#my model
+# Define the model
+my_model_2 = XGBRegressor(n_estimators=1000, learning_rate=0.05) # Your code here
+
+# Fit the model
+my_model_2.fit(X_train, y_train, 
+             early_stopping_rounds=5, 
+             eval_set=[(X_valid, y_valid)], 
+             verbose=False) # Your code here
+
+# Get predictions
+predictions_2 = my_model_2.predict(X_valid) # Your code here
+
+# Calculate MAE
+mae_2 = mean_absolute_error(predictions_2, y_valid) # Your code here
+
+print("Mean Absolute Error:" , mae_2)
+
+#my worse model
+# Define the model
+my_model_3 = XGBRegressor(n_estimators=200, learning_rate=0.02, n_jobs=4)
+
+
+# Fit the model
+my_model_3.fit(X_train, y_train, 
+             early_stopping_rounds=5, 
+             eval_set=[(X_valid, y_valid)], 
+             verbose=False) # Your code here
+
+# Get predictions
+predictions_3 = my_model_3.predict(X_valid)
+
+# Calculate MAE
+mae_3 = mean_absolute_error(predictions_3, y_valid)
+
+print("Mean Absolute Error:" , mae_3)
+
