@@ -33,3 +33,21 @@ model = keras.Sequential([
     # the linear output layer 
     layers.Dense(units=1),
 ])
+
+#The loss function and the optimizer - stochastic gradient descent
+#The loss function measures the disparity between the the target's true value and the value the model predicts
+#The optimizer is an algorithm that adjusts the weights to minimize the loss.
+#stoachastic gradient descent is a common optimizer and the steps are:
+#Sample some training data and run it through the network to make predictions.
+#Measure the loss between the predictions and the true values.
+#Finally, adjust the weights in a direction that makes the loss smaller.
+
+#each sample of training data is called a batch
+#a complete round of the training data is called an epoch
+# the learning rate determines the size of the step we take in each epoch
+
+#adds an optimizer and loss function for training
+model.compile(
+    optimizer="adam",
+    loss="mae",
+)
