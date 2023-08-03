@@ -51,3 +51,33 @@ model.compile(
     optimizer="adam",
     loss="mae",
 )
+
+#wine quality example
+
+from tensorflow import keras
+from tensorflow.keras import layers
+
+model = keras.Sequential([#creeate a sequential model
+    layers.Dense(512, activation='relu', input_shape=[11]),
+    layers.Dense(512, activation='relu'),
+    layers.Dense(512, activation='relu'),
+    layers.Dense(1),
+])
+model.compile(#compile the model
+    optimizer='adam',
+    loss='mae',
+)
+history = model.fit(#train the model
+    X_train, y_train,
+    validation_data=(X_valid, y_valid),
+    batch_size=256,
+    epochs=10,
+)
+
+#plotting the model loss curve can help us better understand our model
+import pandas as pd
+
+# convert the training history to a dataframe
+history_df = pd.DataFrame(history.history)
+# use Pandas native plot method
+history_df['loss'].plot();
