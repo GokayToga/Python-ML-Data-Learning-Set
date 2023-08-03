@@ -81,3 +81,8 @@ import pandas as pd
 history_df = pd.DataFrame(history.history)
 # use Pandas native plot method
 history_df['loss'].plot();
+
+#With the learning rate and the batch size, you have some control over:
+#How long it takes to train a model
+#How noisy the learning curves are
+#How small the loss becomes
