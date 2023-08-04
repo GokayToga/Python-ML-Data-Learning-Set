@@ -86,3 +86,20 @@ history_df['loss'].plot();
 #How long it takes to train a model
 #How noisy the learning curves are
 #How small the loss becomes
+
+#OVERFITTING AND UNDERFITTING
+#The information in the training data can be divided into two parts:
+#Signal: The part of the information that is actually useful for making predictions.
+#Noise: A random (and usually small) error term caused by things like messy data or inconsistent relationships between the features and the target.
+
+#when the training and validation curves are graphed together, there are three common situations:
+#The model is too overfit: This is indicated by validation loss that is consistently higher than training loss.
+#Overfitting the training set is when the loss is not as low as it could be because the model learned too much noise.
+#The model is too underfit: This is indicated by both training and validation loss that is very high.
+#Underfitting the training set is when the loss is not as low as it could be because the model hasn't learned enough signal
+#The model is neither overfit nor underfit. The sweet spot in the middle is where training and validation loss are both low.
+
+#if the models curve go down together that means the model is learning from the signal data and the loss gets decreaed
+#if the models curve go up together that means the model is learning from the noise data and the loss gets increased
+#the gap between the curves tells us how much noise the model has learned.
+#you cant ideally train a model so there will always be noise with signals but you have to ballence the ratio between them
