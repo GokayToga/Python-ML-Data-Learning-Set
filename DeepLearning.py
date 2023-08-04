@@ -103,3 +103,25 @@ history_df['loss'].plot();
 #if the models curve go up together that means the model is learning from the noise data and the loss gets increased
 #the gap between the curves tells us how much noise the model has learned.
 #you cant ideally train a model so there will always be noise with signals but you have to ballence the ratio between them
+
+#Capacity
+
+#A model's capacity refers to the size and complexity of the patterns it is able to learn.
+#You can increase the capacity of a network either by making it wider (more units to existing layers) or by making it deeper (adding more layers).
+
+model = keras.Sequential([
+    layers.Dense(16, activation='relu'),
+    layers.Dense(1),
+])
+
+wider = keras.Sequential([
+    layers.Dense(32, activation='relu'),
+    layers.Dense(1),
+])
+
+deeper = keras.Sequential([
+    layers.Dense(16, activation='relu'),
+    layers.Dense(16, activation='relu'),
+    layers.Dense(1),
+])
+
