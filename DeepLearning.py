@@ -227,3 +227,54 @@ model = keras.Sequential([
 ])
 
 #training is the same
+
+#Binary Classification
+#A binary classifier is simply a model which can decide between two outcomes—usually yes/no, or 1/0.
+
+#Accuracy is the ratio of correct predictions to total predictions: accuracy = number_correct / total
+#eventhogh accuracy is a good metric for classification, it can not be used as an actual loss function
+#so we have to choose a substitute loss function, the most common one is binary cross-entropy function
+
+#Cross-entropy is a sort of measure for the distance from one probability distribution to another.
+
+#To covert the real-valued outputs produced by a dense layer into probabilities,
+#we attach a new kind of activation function, the sigmoid activation.
+
+#everything is the same but In the final layer include a 'sigmoid' activation so that the model will produce class probabilities.
+
+model = keras.Sequential([
+    layers.Dense(4, activation='relu', input_shape=[33]),
+    layers.Dense(4, activation='relu'),    
+    layers.Dense(1, activation='sigmoid'),
+])
+
+model.compile(
+    optimizer='adam',
+    loss='binary_crossentropy',
+    metrics=['binary_accuracy'],
+)
+
+early_stopping = keras.callbacks.EarlyStopping(
+    patience=10,
+    min_delta=0.001,
+    restore_best_weights=True,
+)
+
+history = model.fit(
+    X_train, y_train,
+    validation_data=(X_valid, y_valid),
+    batch_size=512,
+    epochs=1000,
+    callbacks=[early_stopping],
+    verbose=0, # hide the output because we have so many epochs
+)
+
+history_df = pd.DataFrame(history.history)
+# Start the plot at epoch 5
+history_df.loc[5:, ['loss', 'val_loss']].plot()
+history_df.loc[5:, ['binary_accuracy', 'val_binary_accuracy']].plot()
+
+print(("Best Validation Loss: {:0.4f}" +\
+      "\nBest Validation Accuracy: {:0.4f}")\
+      .format(history_df['val_loss'].min(), 
+              history_df['val_binary_accuracy'].max()))
