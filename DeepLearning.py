@@ -125,3 +125,18 @@ deeper = keras.Sequential([
     layers.Dense(1),
 ])
 
+#Early Stopping
+
+#When the model is too eagerly learning noise, the validation loss may start to increase during training 
+#to prevent this we can use early stopping, whenever it seems the validation loss isnt increasing anymore we can stop the training
+
+#So besides preventing overfitting from training too long, early stopping can also prevent underfitting from not training long enough
+#we include early stopping in our training through a callback.
+
+from tensorflow.keras.callbacks import EarlyStopping
+
+early_stopping = EarlyStopping(
+    min_delta=0.001, # minimium amount of change to count as an improvement
+    patience=20, # how many epochs to wait before stopping
+    restore_best_weights=True,
+)
