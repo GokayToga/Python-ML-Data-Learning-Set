@@ -23,8 +23,6 @@ model = keras.Sequential([
 #Stacking Dense Layers
 # We can create a more complex model by stacking layers.
 
-from tensorflow import keras
-from tensorflow.keras import layers
 
 model = keras.Sequential([
     # the hidden ReLU layers
@@ -54,8 +52,6 @@ model.compile(
 
 #wine quality example
 
-from tensorflow import keras
-from tensorflow.keras import layers
 
 model = keras.Sequential([#creeate a sequential model
     layers.Dense(512, activation='relu', input_shape=[11]),
@@ -176,3 +172,58 @@ history = model.fit(
 history_df = pd.DataFrame(history.history)
 history_df.loc[:, ['loss', 'val_loss']].plot();
 print("Minimum validation loss: {}".format(history_df['val_loss'].min()))
+
+
+#there is special layers that doesnt contain any neurons themselves but add some functionality to the model
+#there is two special layers in hand, the dropout layer and the batch normalization layer
+
+#DROP OUT LAYERS
+#the idea behind dropout is to randomly drop some of the neurons in the layer during training
+#this prevents the model from relying too much on any one neuron, so it learns a more robust set of features
+
+keras.Sequential([
+    # ...
+    layers.Dropout(rate=0.3), # apply 30% dropout to the next layer
+    layers.Dense(16),
+    # ...
+])
+
+#BATCH NORMALIZATION LAYERS
+#this helps correct training that is slow or unstable
+#A batch normalization layer looks at each batch as it comes in, first normalizing the batch with its own mean and standard deviation, 
+#and then also putting the data on a new scale with two trainable rescaling parameters.
+
+keras.Sequential([
+    # ...
+    layers.Dense(16, activation='relu'),
+    layers.BatchNormalization(),
+    # ...
+])
+
+keras.Sequential([
+    # ...
+    layers.Dense(16),
+    layers.BatchNormalization(),
+     layers.Activation('relu'),
+    # ...
+])
+
+# if you add it as the first layer of your network it can act as a kind of adaptive preprocessor, 
+# standing in for something like Sci-Kit Learn's StandardScaler.
+
+#when adding dropout, you may need to increase the number of units in your Dense layers.
+
+model = keras.Sequential([
+    layers.Dense(1024, activation='relu', input_shape=[11]),
+    layers.Dropout(0.3),
+    layers.BatchNormalization(),
+    layers.Dense(1024, activation='relu'),
+    layers.Dropout(0.3),
+    layers.BatchNormalization(),
+    layers.Dense(1024, activation='relu'),
+    layers.Dropout(0.3),
+    layers.BatchNormalization(),
+    layers.Dense(1),
+])
+
+#training is the same
